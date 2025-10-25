@@ -1,4 +1,33 @@
 {
   "name": "Abbey-stack-backend",
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.1",
+  "dependencies": {
+    "@prisma/client": "6.18.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn src/server.ts",
+    "runstart": "nodemon src/server.ts",
+    "prisma_studio": "npx prisma studio",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma": "prisma",
+    "worker": "yarn ts-node src/Queue/emailWorker.ts"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.9.1",
+    "nodemon": "^3.1.10",
+    "prisma": "6.18.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
 }
