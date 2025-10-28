@@ -11,7 +11,9 @@ export class AuthService {
             const hashedPassword = await bcrypt.hash(data.password, saltRounds);
             const userData = { ...data, password: hashedPassword }
             const user = await authRepo.createUser(userData)
-            return user
+            const token = generateToken({ id: user.id, email: user.email });
+
+            return token
         } catch (error) {
             throw error
         }

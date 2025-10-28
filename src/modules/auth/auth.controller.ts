@@ -10,8 +10,8 @@ export class AuthController {
             const user = await authService.createUser(req.body)
             res.status(201).json({
                 status: 201,
-                user,
                 message: "User registered successfully",
+                token:user
             });
 
         } catch (error: any) {
@@ -24,7 +24,7 @@ export class AuthController {
         try {
             const data: LoginUserDTO = req.body;
             const user = await authService.loginUser(data);
-            res.json({ message: "Login successful", ...user });
+            res.status(200).json({ status: 200, message: "Login successful", ...user });
         } catch (error: any) {
             res.status(401).json({ error: error.message });
         }

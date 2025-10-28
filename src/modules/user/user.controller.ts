@@ -56,6 +56,7 @@ export class UserController {
             }
             return res.status(200).json({
                 message: "All Users",
+                count:user.length,
                 data: user,
             });
         } catch (error) {

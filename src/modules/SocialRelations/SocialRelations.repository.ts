@@ -1,6 +1,6 @@
 import { PrismaClient, Relationship } from "@prisma/client";
 import prisma from "../../config/prisma";
-prisma
+
 export class SocialRelationRepository {
   async sendFriendRequest(followerId: number, followingId: number) {
     return prisma.relationship.create({
@@ -40,6 +40,39 @@ export class SocialRelationRepository {
     return prisma.relationship.findMany({ where: { followerId: userID } });
   }
 
+   async getUserFollowing(userID: number):Promise<Relationship[]>{
+    return prisma.relationship.findMany({
+    where: {
+      followingId: userID,
+      status: "ACCEPTED",
+    },
+    include: {
+      // followerId: true,
+      // createdAt: true,
+      follower: {
+        select: {  name: true} // if you have a User relation
+      }
+    }
+  });
+  }
+
+
+  
+ async getUserFollower(userID: number):Promise<Relationship[]>{
+    return prisma.relationship.findMany({
+    where: {
+      followerId: userID,
+      status: "ACCEPTED",
+    },
+    include: {
+      // followerId: true,
+      // createdAt: true,
+      following: {
+        select: {  name: true} // if you have a User relation
+      }
+    }
+  });
+  }
   async updateRelationStatus(relationshipId: number, status: "ACCEPTED" | "REJECTED") {
     return prisma.relationship.update({
       where: { id: relationshipId },

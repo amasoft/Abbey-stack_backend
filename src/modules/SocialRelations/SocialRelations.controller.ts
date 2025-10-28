@@ -5,20 +5,51 @@ import { RelationService } from "./SocialRelations.service";
 const relationService = new RelationService();
 
 export class RelationController {
-    static async sendRequest(req: Request, res: Response) {
-        try {
-            const senderId = Number(req.user?.id);
-            const { receiverId } = req.body;
+    // static async sendRequest(req: Request, res: Response) {
+    //     try {
+    //         const senderId = Number(req.user?.id);
+    //         const { receiverId } = req.body;
 
-            //   const { error } = friendRequestSchema.validate({ receiverId });
-            //   if (error) return res.status(400).json({ message: error.details[0].message });
-            console.log(`recieved : ${receiverId} ${senderId}`)
-            const request = await relationService.sendFriendRequest(senderId, receiverId);
-            return res.status(201).json({ message: "Friend request sent", data: request });
-        } catch (err: any) {
-            return res.status(400).json({ message: err.message });
+    //         //   const { error } = friendRequestSchema.validate({ receiverId });
+    //         //   if (error) return res.status(400).json({ message: error.details[0].message });
+    //         // console.log(`recieved : ${receiverId} ${senderId}`)
+    //         // const request = await relationService.sendFriendRequest(senderId, receiverId);
+
+    //         if (senderId === receiverId) {
+    //             throw new Error("You cannot send a friend request to yourself");
+    //         }
+
+    //         const existing = await relationService.findExistingRequest(senderId, receiverId);
+    //         console.log(`sendFriendRequest ${JSON.stringify(existing)}`)
+    //         if (existing) {
+    //             if (existing.status === "PENDING") throw new Error("Request already pending");
+    //             if (existing.status === "ACCEPTED") throw new Error("Already friends");
+    //         }
+    //         const sendrequest = await relationService.sendFriendRequest(senderId, receiverId);
+    //         return res.status(201).json({ message: "Friend request sent", data: sendrequest });
+    //     } catch (err: any) {
+    //         return res.status(400).json({ message: err.message });
+    //     }
+    // }
+
+
+    static async sendRequest(req: Request, res: Response) {
+    try {
+        const senderId = Number(req.user?.id);
+        const { receiverId } = req.body;
+
+        if (senderId === receiverId) {
+            return res.status(400).json({ message: "You cannot send a friend request to yourself" });
         }
+
+        
+        const sendrequest = await relationService.sendFriendRequest(senderId, receiverId);
+        return res.status(201).json({ message: "Friend request sent", data: sendrequest });
+    } catch (err: any) {
+        console.error(err);
+        return res.status(500).json({ message: err.message });
     }
+}
 
     static async updateRequest(req: Request, res: Response) {
         try {
@@ -45,7 +76,28 @@ export class RelationController {
             return res.status(400).json({ message: err.message });
         }
     }
+    static async getFellowers(req: Request, res: Response) {
+        try {
+            const userId = Number(req.user?.id);
 
+
+            const response = await relationService.getFollowers(userId)
+            return res.status(200).json({ message: `All follwers`, data: response });
+        } catch (err: any) {
+            return res.status(400).json({ message: err.message });
+        }
+    }
+static async getFellowing(req: Request, res: Response) {
+        try {
+            const userId = Number(req.user?.id);
+
+
+            const response = await relationService.getFollowing(userId)
+            return res.status(200).json({ message: `All follwers`, data: response });
+        } catch (err: any) {
+            return res.status(400).json({ message: err.message });
+        }
+    }
 
     //   async getPendingRequests(req: Request, res: Response) {
     //     try {
