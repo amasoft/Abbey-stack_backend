@@ -18,4 +18,11 @@ export class UserService {
   async getAllUsers() {
     return userRepo.getAllUsers();
   }
+
+   async getUserEmail(email: string) {
+        const user = await userRepo.findByEmail(email)
+
+        if (!user) throw new Error("User does not exit")
+        return user
+    }
 }
