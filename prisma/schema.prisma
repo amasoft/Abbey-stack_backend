@@ -30,5 +30,12 @@ model Relationship {
   followerId Int
   following User   @relation("Following", fields: [followingId], references: [id])
   followingId Int
+  status RelationShipStatus @default(PENDING)
   createdAt DateTime @default(now())
+}
+
+enum RelationShipStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
