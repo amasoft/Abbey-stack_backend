@@ -41,14 +41,26 @@ export class RelationService {
   async respondToRequest(requestId: number, status: UpdateRequestDto["status"], userId: number) {
     const request = await relationRepo.findRequestById(requestId)
     if (!request) throw new Error("Request not found");
+
+    if(request.status=='ACCEPTED'){
+            throw new Error("Your already friends");
+
+    }
     const id = request.followerId
     console.log(`Patrick ${id} userid ${userId}`)
     // if (request.followerId !== userId)
-    if (request.followerId !== userId || request.followingId !== userId) throw new Error("You can`t perfom operation Here");
+    // if (request.followerId !== userId || request.followingId !== userId) throw new Error("You can`t perfom operation Here");
 
-    if (request.followerId == userId)
+    if (request.followingId == userId){
+      return relationRepo.updateRelationStatus(requestId, status);
+
+    }else{
+
       throw new Error("You are not authorized to respond to this request");
-    return relationRepo.updateRelationStatus(requestId, status);
+    }
+    //  if (request.followerId == userId)
+    //   throw new Error("You are not authorized to respond to this request");
+    // return relationRepo.updateRelationStatus(requestId, status);
   }
 
   async getAllRequest(userID: number) {
